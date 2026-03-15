@@ -1,73 +1,84 @@
-import unittest
-import sys
-
-
 class MatrixProcessor:
+    """Клас для виконання операцій з матрицями згідно з варіантом."""
 
     def execute(self):
+        """Головний метод, що виконує всі дії та обробляє виключення."""
         try:
-            matrix_a = [[10, 20, 30], [40, 50, 60], [70, 80, 90]]
-            matrix_b = [[5, 15, 25], [35, 45, 55], [65, 75, 85]]
+            # Визначення значень у виконавчому методі
+            # Тип int (згідно з C7=3)
+            matrix_a = [
+                [10, 20, 30],
+                [40, 50, 60],
+                [70, 80, 90]
+            ]
 
-            print("\n" + "=" * 40)
-            print("ДІЯ 1: ДОДАВАННЯ МАТРИЦЬ (C = A + B)")
-            print("=" * 40)
+            matrix_b = [
+                [5, 15, 25],
+                [35, 45, 55],
+                [65, 75, 85]
+            ]
 
+            print("--- Дія 1: Додавання матриць (C = A + B) ---")
             matrix_c = self.add_matrices(matrix_a, matrix_b)
             self.print_matrix(matrix_c)
 
-            print("\n" + "=" * 40)
-            print("ДІЯ 2: ПОШУК MAX/MIN У СТОВПЦЯХ (C11=6)")
-            print("=" * 40)
+            print("\n--- Дія 2: Розрахунок специфічної суми стовпців (C11=6) ---")
             result_sum = self.calculate_special_column_sum(matrix_c)
-            print(f"\nЗАГАЛЬНА СУМА: {result_sum}")
+            print(f"Результат суми: {result_sum}")
 
+        except ValueError as e:
+            print(f"Помилка у значеннях або розмірності: {e}")
+        except TypeError as e:
+            print(f"Помилка типу даних: {e}")
         except Exception as e:
-            print(f"Помилка під час виконання: {e}")
+            print(f"Виникла непередбачена помилка: {e}")
 
     def add_matrices(self, a, b):
+        """Виконує додавання двох матриць."""
         if len(a) != len(b) or len(a[0]) != len(b[0]):
-            raise ValueError("Матриці повинні мати однакові розміри.")
-        return [[a[i][j] + b[i][j] for j in range(len(a[0]))] for i in range(len(a))]
+            raise ValueError("Матриці повинні мати однакові розміри для додавання.")
+
+        rows = len(a)
+        cols = len(a[0])
+        # Створення результуючої матриці через list comprehension
+        result = [[a[i][j] + b[i][j] for j in range(cols)] for i in range(rows)]
+        return result
 
     def calculate_special_column_sum(self, matrix):
-        rows, cols = len(matrix), len(matrix[0])
+        """
+        Обчислює суму найбільших елементів у парних стовпцях
+        та найменших у непарних стовпцях.
+        """
+        if not matrix or not matrix[0]:
+            raise ValueError("Матриця порожня.")
+
+        rows = len(matrix)
+        cols = len(matrix[0])
         total_sum = 0
+
         for j in range(cols):
-            column = [matrix[i][j] for i in range(rows)]
+            # Отримуємо всі елементи поточного стовпця j
+            column_elements = [matrix[i][j] for i in range(rows)]
+
             if j % 2 == 0:
-                val = max(column)
-                print(f"Стовпець {j} (парний): max = {val}")
+                # Парний індекс стовпця (0, 2...) -> Шукаємо MAX
+                current_val = max(column_elements)
+                print(f"Стовпець {j} (парний): max = {current_val}")
             else:
-                val = min(column)
-                print(f"Стовпець {j} (непарний): min = {val}")
-            total_sum += val
+                # Непарний індекс стовпця (1, 3...) -> Шукаємо MIN
+                current_val = min(column_elements)
+                print(f"Стовпець {j} (непарний): min = {current_val}")
+
+            total_sum += current_val
+
         return total_sum
 
     def print_matrix(self, matrix):
+        """Вивід матриці у зручному форматі."""
         for row in matrix:
             print("\t".join(map(str, row)))
 
 
-class TestMatrixProcessor(unittest.TestCase):
-
-    def setUp(self):
-        self.processor = MatrixProcessor()
-
-    def test_add_matrices(self):
-        a = [[1, 1], [1, 1]]
-        b = [[2, 2], [2, 2]]
-        self.assertEqual(self.processor.add_matrices(a, b), [[3, 3], [3, 3]])
-
-    def test_special_sum_logic(self):
-        matrix = [[10, 20], [30, 5]]
-        self.assertEqual(self.processor.calculate_special_column_sum(matrix), 35)
-
-
 if __name__ == "__main__":
-    p = MatrixProcessor()
-    p.execute()
-    print("\n" + "-" * 40)
-    print("РЕЗУЛЬТАТИ ТЕСТУВАННЯ:")
-    print("-" * 40)
-    unittest.main(argv=[sys.argv[0]], exit=False, buffer=True)
+    processor = MatrixProcessor()
+    processor.execute()

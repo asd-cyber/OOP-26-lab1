@@ -26,4 +26,4 @@ jobs:
 
     - name: Запускаємо тести через pytest
       run: |
-        pytest test_logic.py
+        pytest l1test.py

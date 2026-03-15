@@ -1,5 +1,5 @@
 class MatrixProcessor:
-    
+
     def execute(self):
         try:
             matrix_a = [

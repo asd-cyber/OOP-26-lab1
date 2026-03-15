@@ -1,6 +1,5 @@
 name: Python CI
 
-# Коли запускати тести:
 on:
   push:
     branches: [ "main" ]
@@ -9,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest # Тести запускаються на Linux
+    runs-on: ubuntu-latest
 
     steps:
     - name: Копіюємо код репозиторію
@@ -23,10 +22,8 @@ jobs:
     - name: Встановлюємо залежності
       run: |
         python -m pip install --upgrade pip
-        # Якщо у тебе є файл requirements.txt, розкоментуй рядок нижче:
-        # pip install -r requirements.txt
         pip install pytest
 
     - name: Запускаємо тести через pytest
       run: |
-        l1c.py
+        pytest test_logic.py

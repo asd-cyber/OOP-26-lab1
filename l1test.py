@@ -29,7 +29,6 @@ class TestMatrixProcessor(unittest.TestCase):
 
     def test_calculate_special_column_sum_single_element(self):
         matrix = [[42]]
-        # Стовпець 0 (парний): max([42]) = 42
         result = self.processor.calculate_special_column_sum(matrix)
         self.assertEqual(result, 42)
 
